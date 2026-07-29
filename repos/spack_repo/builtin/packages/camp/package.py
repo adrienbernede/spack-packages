@@ -90,6 +90,7 @@ class Camp(CMakePackage, CudaPackage, ROCmPackage):
 
     # TODO: figure out gtest dependency and then set this default True.
     variant("tests", default=False, description="Build tests")
+    variant("shared", default=False, description="Build shared libs")
     variant("openmp", default=False, description="Build with OpenMP support")
     variant("omptarget", default=False, description="Build with OpenMP Target support")
     variant("sycl", default=False, description="Build with Sycl support")
@@ -158,5 +159,11 @@ class Camp(CMakePackage, CudaPackage, ROCmPackage):
         options.append(self.define_from_variant("ENABLE_OPENMP", "openmp"))
         options.append(self.define_from_variant("CAMP_ENABLE_TARGET_OPENMP", "omptarget"))
         options.append(self.define_from_variant("ENABLE_SYCL", "sycl"))
+        options.append(self.define_from_variant("BUILD_SHARED_LIBS", "shared"))
 
         return options
+
+    @property
+    def libs(self):
+        shared = "+shared" in self.spec
+        return find_libraries("libcamp", root=self.prefix, shared=shared, recursive=True)
