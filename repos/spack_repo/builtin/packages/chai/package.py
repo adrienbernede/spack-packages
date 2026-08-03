@@ -161,15 +161,15 @@ class Chai(CachedCMakePackage, CudaPackage, ROCmPackage):
     variant(
         "cxxstd",
         default="20",
+        description="C++ standard to build with",
         values=(
-            conditional("11", when="@:2.4"),
+            conditional("11", when="@:1.0"),
             conditional("14", when="@:2025.03"),
             conditional("17", when="@:2025.12"),
             "20",
             "23",
         ),
         multi=False,
-        description="C++ standard to build with",
     )
 
     # TODO: figure out gtest dependency and then set this default True
